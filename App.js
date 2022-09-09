@@ -1,5 +1,5 @@
 import React, {useId, useState} from 'react';
-import {View, Text, StyleSheet, TextInput, TouchableWithoutFeedback} from 'react-native';
+import {View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import {firestore } from './firrebase'
 
