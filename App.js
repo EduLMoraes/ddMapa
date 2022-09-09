@@ -1,10 +1,8 @@
-//
-// Alunos, o Exemplo base foi retirado do site
-// https://devsamurai.com.br/react-native-mapa-geolocalizacao/
-//
-import React, {useState} from 'react';
+import React, {useId, useState} from 'react';
 import {View, Text, StyleSheet, TextInput, TouchableWithoutFeedback} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
+import {firestore } from './firrebase'
+
 const App = () => {
 const [position, setPosition] = useState({
 latitude: -31.308840,
@@ -13,6 +11,21 @@ latitudeDelta: 0.0922,
 longitudeDelta: 0.0421,
 });
 const [titulo, setTitulo] = useState('');
+const [descricao, setDescriacao] = useState('');
+
+const ref = firestore.collection('Marcador').doc();
+const enviarDados = () => {
+    ref.set({
+      longitude:  position.longitude,
+      latitude:   position.latitude, 
+      titulo: titulo,
+      descricao: descricao,
+      id: ref.id,
+    })
+    .then(() => {
+      alert('Marcador adicionado com sucesso');
+    });
+ }
 
 return (
 <View style={styles.container}>
@@ -29,7 +42,7 @@ onPress={e =>setPosition({...position,
 <Marker
 coordinate={position}
 title={titulo}
-description={'Testando o marcador no mapa'}
+description={descricao}
 />
 </MapView>
 
@@ -39,8 +52,22 @@ description={'Testando o marcador no mapa'}
           onChangeText={text => setTitulo(text)}
           style = {styles.texto}
         />
+
+<TextInput
+          placeholder="Descrição"
+          value={descricao}
+          onChangeText={text => setDescriacao(text)}
+          style = {styles.texto}
+        />
 <Text>Latitude: {position.latitude}</Text>
 <Text>longitude: {position.longitude}</Text>
+
+<TouchableOpacity
+          onPress={enviarDados}
+        >
+          <Text> Salvar Marcador </Text>
+</TouchableOpacity>
+
 </View>
 );
 };
@@ -49,7 +76,7 @@ container: {
 flex: 1,
 },
 map: {
-height: '80%',
+height: '50%',
 width: '100%',
 },
 
